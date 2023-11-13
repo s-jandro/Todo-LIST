@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Todo LIST</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+      body {
+        background-color: #000000;
+        color: #ffffff;
+      }
+      input[type="checkbox"]:checked + label {
+        text-decoration: underline;
+      }
+      .fixed-buttons {
+        position: fixed;
+        top: 50px;
+        right: 10px;
+      }
+      .btn-space {
+        margin-bottom: 10px;
+      }
+      #select-all {
+        background-color: #007bff;
+        color: white;
+      }
+      #new-task input[type="submit"] {
+        background-color: #28a745;
+        color: white;
+      }
+      h1 {
+        text-align: center;
+      }
+      #tasks .list-group-item {
+        color: #333333; /* Cambio de color del texto de la lista de tareas */
+      }
+    </style>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelector('#new-task').addEventListener('submit', (event) => {
+          event.preventDefault();
+          const cb = document.createElement("input");
+          cb.setAttribute("type", "checkbox");
+          const id = `task${document.querySelectorAll('input[type="checkbox"]').length + 1}`;
+          cb.setAttribute("id", id);
+
+          const li = document.createElement('li');
+          const label = document.createElement('label');
+          label.setAttribute("for", id);
+          label.textContent = document.querySelector('#task').value;
+
+          li.classList.add('list-group-item');
+          li.appendChild(cb);
+          li.appendChild(label);
+
+          document.querySelector('#tasks').append(li);
+          document.querySelector('#task').value = '';
+
+          cb.addEventListener('change', () => {
+            if (cb.checked) {
+              label.style.textDecoration = "underline";
+            } else {
+              label.style.textDecoration = "none";
+            }
+          });
+        });
+
+        document.querySelector('#select-all').onclick = () => {
+          const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+          checkboxes.forEach((checkbox) => {
+            checkbox.checked = true;
+            checkbox.dispatchEvent(new Event('change'));
+          });
+        };
+
+        document.querySelector('#delete-selected').onclick = () => {
+          const tasks = document.querySelectorAll('li');
+          tasks.forEach((task) => {
+            const checkbox = task.querySelector('input[type="checkbox"]');
+            if (checkbox.checked) {
+              task.remove();
+            }
+          });
+        };
+      });
+    </script>
+    </head>
+  <body>
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-9">
+          <h1>Tareas</h1>
+          <form id="new-task" class="form-group">
+            <input id="task" class="form-control" autocomplete="off" autofocus placeholder="Nueva Tarea" type="text">
+            <input type="submit" class="btn btn-primary mt-2">
+          </form>
+          <ul id="tasks" class="list-group mt-3">
+          </ul>
+        </div>
+        <div class="col-md-3 fixed-buttons">
+          <div class="btn-group-vertical">
+            <button id="select-all" class="btn btn-info btn-space">Seleccionar Todo</button>
+            <button id="delete-selected" class="btn btn-danger">Eliminar Seleccionado</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
+
